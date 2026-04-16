@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
+
+const getSnapshot = () => window.innerWidth;
+const getServerSnapshot = () => 0;
+const subscribe = (callback: () => void) => {
+  window.addEventListener('resize', callback);
+  return () => window.removeEventListener('resize', callback);
+};
 
 export const useWindowSize = () => {
-  const [windowSize, setWindowSize] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-  });
-
-  useEffect(() => {
-    const handleResize = () => setWindowSize({ width: window.innerWidth });
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
+  const width = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return { width };
 };
