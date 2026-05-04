@@ -24,4 +24,7 @@ export class QuizKeyword {
 
   @Column({ name: 'description', type: 'text', nullable: true })
   description?: string;
+
+  @Column({ type: 'vector', length: 768, nullable: true })
+  embedding: number[];
 }

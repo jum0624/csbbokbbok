@@ -122,11 +122,12 @@ declare module '@google/genai' {
   }
 
   export class GoogleGenAI {
-    constructor(apiKey: string);
+    constructor(apiKey: { apiKey: any });
     models: {
       generateContent(
         request: GenerateContentRequest,
       ): Promise<GenerateContentResponse>;
+      embedContent(request: EmbedContentRequest): Promise<EmbedContentResponse>;
     };
   }
 }

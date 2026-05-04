@@ -106,4 +106,22 @@ export class MainQuizRepository extends Repository<MainQuiz> {
 
     return result;
   }
+
+  async findAllWithoutEmbedding(): Promise<MainQuiz[]> {
+    return this.createQueryBuilder('mq')
+      .leftJoinAndSelect('mq.keywords', 'keywords')
+      .where('mq.embedding IS NULL')
+      .getMany();
+  }
+
+  async updateEmbedding(
+    mainQuizId: number,
+    embedding: number[],
+  ): Promise<void> {
+    await this.createQueryBuilder()
+      .update(MainQuiz)
+      .set({ embedding } as any)
+      .where('main_quiz_id = :mainQuizId', { mainQuizId })
+      .execute();
+  }
 }
