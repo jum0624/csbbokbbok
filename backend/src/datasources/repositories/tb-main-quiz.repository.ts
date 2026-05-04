@@ -124,4 +124,25 @@ export class MainQuizRepository extends Repository<MainQuiz> {
       .where('main_quiz_id = :mainQuizId', { mainQuizId })
       .execute();
   }
+
+  /**
+   * 유사도 검증 메소드
+   * @param embedding
+   * @param excludeQuizId
+   * @param limit
+   */
+  async findSimilarQuizzes(
+    embedding: number[],
+    excludeQuizId: number,
+    limit: number = 5,
+  ): Promise<MainQuiz[]> {
+    return this.createQueryBuilder('mq')
+      .leftJoinAndSelect('mq.quizCategory', 'quizCategory')
+      .where('mq.main_quiz_id != :excludeQuizId', { excludeQuizId })
+      .andWhere('mq.embedding IS NOT NULL')
+      .orderBy(`mq.embedding <=> :embedding::vector`)
+      .setParameter('embedding', `[${embedding.join(',')}]`)
+      .limit(limit)
+      .getMany();
+  }
 }

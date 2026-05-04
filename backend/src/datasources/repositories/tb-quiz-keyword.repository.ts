@@ -33,4 +33,15 @@ export class QuizKeywordRepository extends Repository<QuizKeyword> {
       .where('quiz_keyword_id = :quizKeywordId', { quizKeywordId })
       .execute();
   }
+
+  /**
+   * 임베딩 키워드 찾기
+   * @param keywords
+   */
+  findEmbeddingsByKeywords(keywords: string[]): Promise<QuizKeyword[]> {
+    return this.createQueryBuilder('qk')
+      .where('qk.keyword IN (:...keywords)', { keywords })
+      .andWhere('qk.embedding IS NOT NULL')
+      .getMany();
+  }
 }

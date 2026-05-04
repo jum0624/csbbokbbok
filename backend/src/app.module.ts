@@ -20,6 +20,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EmbeddingModule } from './modules/embedding/embedding.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
+import { RecommendationModule } from 'src/modules/recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
     FeedbackModule,
     AuthModule,
     EmbeddingModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [
