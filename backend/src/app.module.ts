@@ -17,6 +17,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { EmbeddingModule } from './modules/embedding/embedding.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
 
@@ -60,6 +61,7 @@ import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
     QuizModule,
     FeedbackModule,
     AuthModule,
+    EmbeddingModule,
   ],
   controllers: [AppController],
   providers: [
