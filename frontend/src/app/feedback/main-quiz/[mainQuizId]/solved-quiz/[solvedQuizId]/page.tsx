@@ -1,4 +1,4 @@
-import { fetchAIFeedbackResult } from '@/services/apis/feedbackApi';
+import { fetchAIFeedbackResult, fetchRecommendedQuizzes } from '@/services/apis/feedbackApi';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import FeedbackHeader from '@/app/feedback/components/FeedbackHeader';
@@ -6,6 +6,7 @@ import FeedbackKeywords from '../../../../components/keywords/FeedbackKeywords';
 import FeedbackQuestions from '@/app/feedback/components/FeedbackQuestions';
 import FeedbackComplements from '@/app/feedback/components/complements/FeedbackComplements';
 import ImportanceCheck from '@/app/feedback/components/ImportanceCheck';
+import RecommendedQuizzes from '@/app/feedback/components/RecommendedQuizzes';
 import PreventBackNavigation from '@/components/PreventBackNavigation';
 import { ApiError } from '@/services/http/errors';
 
@@ -33,6 +34,8 @@ export default async function FeedbackPage({ params }: Props) {
     }
     redirect('/quizzes?error=not_found');
   }
+
+  const recommendedQuizzes = await fetchRecommendedQuizzes(Number(solvedQuizId)).catch(() => []);
   const { solvedQuizDetail, aiFeedbackResult } = data;
 
   const mergedKeywords = solvedQuizDetail.keywords.map((k) => ({
@@ -61,6 +64,7 @@ export default async function FeedbackPage({ params }: Props) {
       />
       <FeedbackComplements items={aiFeedbackResult.complementsFeedback} />
       <FeedbackQuestions questions={aiFeedbackResult.followUpQuestions} />
+      <RecommendedQuizzes quizzes={recommendedQuizzes} />
       <ImportanceCheck
         userName={username}
         mainQuizId={solvedQuizDetail.mainQuizId}

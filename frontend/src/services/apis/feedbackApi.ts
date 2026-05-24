@@ -1,6 +1,6 @@
 import { SolvedQuizResponseDto } from '@/app/checklist/types/checklist.types';
 import { apiFetch } from '../http/apiFetch';
-import { GetAIFeedbackResponseDto } from '@/app/feedback/types/feedback';
+import { GetAIFeedbackResponseDto, RecommendedQuiz } from '@/app/feedback/types/feedback';
 
 export interface SolvedQuizSubmitRequestDto {
   mainQuizId: number;
@@ -56,6 +56,15 @@ export async function fetchAIFeedbackResult(solvedQuizId: number) {
       method: 'GET',
     },
     { message: 'AI 피드백 조회를 실패했습니다.' },
+  );
+  return data;
+}
+
+export async function fetchRecommendedQuizzes(solvedQuizId: number): Promise<RecommendedQuiz[]> {
+  const data = await apiFetch<RecommendedQuiz[]>(
+    `/recommendation/quizzes?solvedQuizId=${solvedQuizId}`,
+    { method: 'GET' },
+    { message: '추천 문제 조회를 실패했습니다.' },
   );
   return data;
 }

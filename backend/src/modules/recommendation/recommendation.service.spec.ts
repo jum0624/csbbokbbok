@@ -10,7 +10,7 @@ import { DifficultyLevel } from 'src/datasources/entities/tb-main-quiz.entity';
 const makeSolvedQuiz = (aiFeedback: AiFeedback | null) => ({
   solvedQuizId: 10,
   aiFeedback,
-  mainQuiz: { mainQuizId: 42 },
+  mainQuiz: { mainQuizId: 42, embedding: [1, 0, 0, 0] },
 });
 
 const makeAiFeedback = (
@@ -107,7 +107,7 @@ describe('RecommendationService', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('missed 키워드가 없으면(전부 isIncluded: true) 빈 배열을 반환한다', async () => {
+    it('모든 키워드를 맞혔으면 현재 문제 임베딩 기반으로 유사 문제를 반환한다', async () => {
       const feedback = makeAiFeedback([
         { keyword: '교착상태', isIncluded: true },
         { keyword: '기아현상', isIncluded: true },
@@ -115,10 +115,18 @@ describe('RecommendationService', () => {
       solvedQuizRepository.getById.mockResolvedValue(
         makeSolvedQuiz(feedback) as never,
       );
+      mainQuizRepository.findSimilarQuizzes.mockResolvedValue([
+        makeQuiz(77),
+      ] as never);
 
       const result = await service.getRecommendedQuizzes(10);
 
-      expect(result).toEqual([]);
+      expect(result).toHaveLength(1);
+      expect(result[0].mainQuizId).toBe(77);
+      expect(mainQuizRepository.findSimilarQuizzes).toHaveBeenCalledWith(
+        [1, 0, 0, 0],
+        42,
+      );
       expect(
         quizKeywordRepository.findEmbeddingsByKeywords,
       ).not.toHaveBeenCalled();

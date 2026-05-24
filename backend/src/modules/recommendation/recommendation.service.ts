@@ -27,7 +27,13 @@ export class RecommendationService {
       .filter((k) => !k.isIncluded)
       .map((k) => k.keyword);
 
-    if (missedKeywords.length === 0) return [];
+    if (missedKeywords.length === 0) {
+      const similar = await this.mainQuizRepository.findSimilarQuizzes(
+        solvedQuiz.mainQuiz.embedding,
+        solvedQuiz.mainQuiz.mainQuizId,
+      );
+      return similar.map((quiz) => RecommendResponseDto.from(quiz));
+    }
 
     // 3. 키워드 임베딩 조회
     const keywordEntities =
