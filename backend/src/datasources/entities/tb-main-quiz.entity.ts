@@ -46,6 +46,9 @@ export class MainQuiz {
   @Column({ name: 'hint', type: 'varchar', length: 255, nullable: true })
   hint?: string;
 
+  @Column({ type: 'vector', length: 768, nullable: true })
+  embedding: number[];
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',

@@ -44,6 +44,7 @@ export class FeedbackService {
     if (!apiKey) {
       throw new Error('GEMINI_API_KEY is missing');
     }
+    // @ts-expect-error: custom type definition has incorrect constructor signature
     this.genAI = new GoogleGenAI(apiKey);
   }
 

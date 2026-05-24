@@ -1,5 +1,13 @@
 import { Importance } from '@/types/solvedQuiz.types';
 
+export interface RecommendedQuiz {
+  mainQuizId: number;
+  title: string;
+  content: string;
+  difficultyLevel: string;
+  category: string;
+}
+
 export interface IncludedKeyword {
   keyword: string;
   isIncluded: boolean;
