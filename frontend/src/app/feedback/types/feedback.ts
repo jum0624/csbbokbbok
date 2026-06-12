@@ -6,6 +6,7 @@ export interface RecommendedQuiz {
   content: string;
   difficultyLevel: string;
   category: string;
+  similarityScore: number;
 }
 
 export interface IncludedKeyword {

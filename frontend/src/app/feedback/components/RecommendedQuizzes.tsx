@@ -33,11 +33,16 @@ export default function RecommendedQuizzes({ quizzes }: { quizzes: RecommendedQu
                   <p className="text-md font-semibold text-slate-800 group-hover:text-blue-700 transition-colors duration-200 leading-snug">
                     {quiz.title}
                   </p>
-                  <QuizInfoBadge
-                    quizCategoryName={quiz.category}
-                    difficultyLevel={quiz.difficultyLevel as '상' | '중' | '하'}
-                    size="sm"
-                  />
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs font-medium text-slate-400 whitespace-nowrap">
+                      유사도 {(quiz.similarityScore * 100).toFixed(1)}%
+                    </span>
+                    <QuizInfoBadge
+                      quizCategoryName={quiz.category}
+                      difficultyLevel={quiz.difficultyLevel as '상' | '중' | '하'}
+                      size="sm"
+                    />
+                  </div>
                 </div>
                 <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
                   {quiz.content}

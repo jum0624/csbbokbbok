@@ -135,14 +135,21 @@ export class MainQuizRepository extends Repository<MainQuiz> {
     embedding: number[],
     excludeQuizId: number,
     limit: number = 5,
-  ): Promise<MainQuiz[]> {
-    return this.createQueryBuilder('mq')
+  ): Promise<(MainQuiz & { similarityScore: number })[]> {
+    const rows = await this.createQueryBuilder('mq')
       .leftJoinAndSelect('mq.quizCategory', 'quizCategory')
+      .addSelect(`1 - (mq.embedding <=> :embedding::vector)`, 'similarity')
       .where('mq.main_quiz_id != :excludeQuizId', { excludeQuizId })
       .andWhere('mq.embedding IS NOT NULL')
-      .orderBy(`mq.embedding <=> :embedding::vector`)
+      .orderBy('similarity', 'DESC')
       .setParameter('embedding', `[${embedding.join(',')}]`)
       .limit(limit)
-      .getMany();
+      .getRawAndEntities();
+
+    return rows.entities.map((entity, i) =>
+      Object.assign(entity, {
+        similarityScore: parseFloat(rows.raw[i].similarity),
+      }),
+    );
   }
 }

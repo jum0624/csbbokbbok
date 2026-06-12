@@ -2,6 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { RecommendationService } from 'src/modules/recommendation/recommendation.service';
 import { Public } from 'src/modules/auth/decorator/public.decorator';
 import { RecommendResponseDto } from 'src/modules/recommendation/dto/recommend-response.dto';
+import { CompareResponseDto } from 'src/modules/recommendation/dto/compare-response.dto';
 
 @Public()
 @Controller('recommendation')
@@ -13,6 +14,15 @@ export class RecommendationController {
     @Query('solvedQuizId') solvedQuizId: string,
   ): Promise<RecommendResponseDto[]> {
     return this.recommendationService.getRecommendedQuizzes(
+      Number(solvedQuizId),
+    );
+  }
+
+  @Get('compare')
+  async compareRecommendationMethods(
+    @Query('solvedQuizId') solvedQuizId: string,
+  ): Promise<CompareResponseDto> {
+    return this.recommendationService.compareRecommendationMethods(
       Number(solvedQuizId),
     );
   }

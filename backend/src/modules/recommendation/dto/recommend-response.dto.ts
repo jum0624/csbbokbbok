@@ -4,6 +4,7 @@ export class RecommendResponseDto {
   content: string;
   difficultyLevel: string;
   category: string;
+  similarityScore: number;
 
   static from(quiz: any): RecommendResponseDto {
     const dto = new RecommendResponseDto();
@@ -12,6 +13,7 @@ export class RecommendResponseDto {
     dto.content = quiz.content;
     dto.difficultyLevel = quiz.difficultyLevel;
     dto.category = quiz.quizCategory?.name;
+    dto.similarityScore = quiz.similarityScore;
     return dto;
   }
 }
